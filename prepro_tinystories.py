@@ -19,13 +19,13 @@ streams of int32 numbers indicating the token ids.
 import os
 import glob
 import json
-import random
 import requests
 from tqdm import tqdm
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
 import tiktoken
 import numpy as np
+import secrets
 
 DATA_CACHE_DIR = "data"
 enc = tiktoken.get_encoding("gpt2")
@@ -80,7 +80,7 @@ def process_shard(shard_index, shard_filename):
     with open(shard_filename, "r") as f:
         data = json.load(f)
     eot = enc._special_tokens['<|endoftext|>'] # end of text token
-    rng = random.Random(1337 + shard_index)
+    rng = secrets.SystemRandom().Random(1337 + shard_index)
     rng.shuffle(data)
     all_tokens = []
     for example in data:
