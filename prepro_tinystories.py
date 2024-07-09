@@ -33,7 +33,7 @@ encode = lambda s: enc.encode_ordinary(s)
 
 def download_file(url: str, fname: str, chunk_size=1024):
     """Helper function to download a file from a given url"""
-    resp = requests.get(url, stream=True)
+    resp = requests.get(url, stream=True, timeout=60)
     total = int(resp.headers.get("content-length", 0))
     with open(fname, "wb") as file, tqdm(
         desc=fname,
