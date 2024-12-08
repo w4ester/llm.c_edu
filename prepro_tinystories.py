@@ -20,12 +20,12 @@ import os
 import glob
 import json
 import random
-import requests
 from tqdm import tqdm
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
 import tiktoken
 import numpy as np
+from security import safe_requests
 
 DATA_CACHE_DIR = "data"
 enc = tiktoken.get_encoding("gpt2")
@@ -33,7 +33,7 @@ encode = lambda s: enc.encode_ordinary(s)
 
 def download_file(url: str, fname: str, chunk_size=1024):
     """Helper function to download a file from a given url"""
-    resp = requests.get(url, stream=True)
+    resp = safe_requests.get(url, stream=True)
     total = int(resp.headers.get("content-length", 0))
     with open(fname, "wb") as file, tqdm(
         desc=fname,
